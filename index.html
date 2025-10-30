@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>ur days!</title>
+  <style>
+    :root{
+      --bg:#ffeef6; --card:#fff3fb; --accent:#ff69b4; --muted:#f6ccea;
+      font-family: 'Segoe UI', Roboto, system-ui, -apple-system, 'Helvetica Neue', Arial;
+    }
+    html,body{height:100%;margin:0}
+    body{
+      background: radial-gradient(circle at 20% 10%, #fff0f8 0%, var(--bg) 35%), linear-gradient(180deg,#fff 0%, var(--bg) 100%);
+      display:flex;align-items:center;justify-content:center;padding:24px;overflow:hidden;
+    }
+    .stage{width:100%;max-width:980px;background:var(--card);border-radius:18px;box-shadow:0 8px 30px rgba(0,0,0,0.08);padding:28px;position:relative;overflow:hidden}
+
+    header{display:flex;align-items:center;gap:16px}
+    .logo{width:74px;height:74px;border-radius:12px;background:linear-gradient(135deg,#ffd6ec,#ffc8e6);display:flex;align-items:center;justify-content:center;font-size:32px}
+    h1{margin:0;font-size:24px;color:#8b2150}
+    p.lead{margin:6px 0 18px;color:#7a2c4e}
+
+    .message-box{background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,250,255,0.9));border-radius:12px;padding:18px;min-height:140px;box-shadow:inset 0 1px 0 rgba(255,255,255,0.6)}
+
+    .typed{font-family:monospace;white-space:pre-wrap;line-height:1.5;font-size:16px;color:#5a1f3a}
+    .cursor{display:inline-block;width:10px;background:var(--accent);margin-left:6px;animation:blink 1s steps(2) infinite}
+    @keyframes blink{50%{opacity:0}}
+
+    .emoji-layer{pointer-events:none;position:absolute;inset:0;overflow:hidden}
+    .emoji{position:absolute;font-size:28px;will-change:transform,opacity}
+  </style>
+</head>
+<body>
+  <div class="stage" role="main">
+    <header>
+      <div class="logo">🎀</div>
+      <div>
+        <h1>happy ur dayy!🎉</h1>
+        <p class="lead">may you always be happy!!</p>
+      </div>
+    </header>
+
+    <div class="message-box" id="messageBox">
+      <div id="typed" class="typed" aria-live="polite"></div><span id="cursor" class="cursor" aria-hidden="true"></span>
+    </div>
+
+    <div class="emoji-layer" id="emojiLayer" aria-hidden="true"></div>
+
+    <audio id="bgMusic" loop autoplay>
+      <source src="monokrom.mp3" type="audio/mpeg">
+      Browser Anda tidak mendukung audio.
+    </audio>
+  </div>
+
+  <script>
+    function typeText(targetEl, text, speed=30){
+      return new Promise((resolve)=>{
+        targetEl.textContent = '';
+        let i=0;
+        const cursor = document.getElementById('cursor');
+        cursor.style.display = 'inline-block';
+        function step(){
+          if(i < text.length){
+            targetEl.textContent += text.charAt(i);
+            i++;
+            setTimeout(step, speed + Math.random()*20);
+          } else {
+            cursor.style.display = 'none';
+            resolve();
+          }
+        }
+        step();
+      });
+    }
+
+    const typedEl = document.getElementById('typed');
+    const initial = 'happy sweet seventeen adee!🎉\nselamat bertambah usia, sehat selalu dan panjang umur yaaa, doa terbaik buat kamuu. semoga di umur yang sekarang semesta berpihak ya sama kamu, semoga bisa dapetin hal yang selama ini kamu perjuangin, semoga selalu bahagia dan semoga itu selamanya. my best wishes for u;
+    typeText(typedEl, initial, 35);
+
+    const emojiLayer = document.getElementById('emojiLayer');
+    const EMOJIS = ['🌸','🌺','🌷','🎂','🧁','🌼','🌻'];
+
+    function spawnEmoji(){
+      const el = document.createElement('div');
+      el.className = 'emoji';
+      el.textContent = EMOJIS[Math.floor(Math.random()*EMOJIS.length)];
+      const size = 18 + Math.random()*36;
+      el.style.fontSize = size + 'px';
+      const left = Math.random()*100;
+      el.style.left = left + '%';
+      el.style.top = '-10%';
+      const duration = 4000 + Math.random()*6000;
+      el.style.transition = `transform ${duration}ms linear, opacity ${duration}ms linear`;
+      emojiLayer.appendChild(el);
+
+      requestAnimationFrame(()=>{
+        const sway = (Math.random()*60 - 30);
+        el.style.transform = `translateY(${100 + Math.random()*30}vh) translateX(${sway}px) rotate(${Math.random()*360}deg)`;
+        el.style.opacity = '0.02';
+      });
+
+      setTimeout(()=>{ emojiLayer.removeChild(el); }, duration + 200);
+    }
+
+    for(let i=0;i<12;i++){ setTimeout(spawnEmoji, i*180); }
+    setInterval(spawnEmoji, 240);
+
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.6;
+    bgMusic.play().catch(()=>{console.warn('Autoplay mungkin diblokir browser');});
+  </script>
+</body>
+</html>
